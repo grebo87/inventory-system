@@ -4,52 +4,44 @@ namespace App\Livewire\Customers;
 
 use App\Livewire\Forms\Customers\CustomerForm;
 use App\Models\Customer;
-
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
-use Livewire\WithPagination;
-use Illuminate\Support\Str;
-
-// filament table
+// filament
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Support\Enums\Alignment;
 use Filament\Support\Enums\MaxWidth;
-use Filament\Tables;
-use Filament\Tables\Columns\BooleanColumn;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
-use Illuminate\Support\HtmlString;
-use Filament\Tables\Filters\Filter;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
-use Filament\Tables\Filters\SelectFilter;
 
 class CustomersList extends Component implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
 
-
     public function table(Table $table): Table
     {
         return $table
-            // ->selectable()
             ->query(Customer::query())
             ->columns([
+                TextColumn::make('document_type')
+                    ->label(__('Document'))
+                    ->searchable()
+                    ->sortable()
+                    ->formatStateUsing(fn (Customer $record): string => "{$record->document_type}: {$record->document_number}"),
+                // TextColumn::make('document_number')
+                // ->label(__('Document Number'))
+                // ->searchable()
+                // ->sortable(),
                 TextColumn::make('name')
                     ->label(__('Name'))
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('cedula')
-                    ->label(__('Cedula'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('phone')
@@ -76,16 +68,16 @@ class CustomersList extends Component implements HasForms, HasTable
                     EditAction::make()
                         ->form(CustomerForm::schema())
                         ->modalAlignment(Alignment::Start)
-                        ->modalWidth(MaxWidth::ThreeExtraLarge),
-                    DeleteAction::make(),
+                        ->modalWidth(MaxWidth::ThreeExtraLarge)
+                        ->successNotificationTitle(__('Customer saved successfully.')),
+                    DeleteAction::make()
+                        ->successNotificationTitle(__('Customer delete successfully.')),
                 ])
             ])
-            ->searchPlaceholder(__('Search'))
             ->filters([
-                Filter::make('name')->label(__('Name')),
+                // Filter::make('name')->label(__('Name')),
                 // Filter::make('status')->toggle(),
-                Filter::make('cedula')->label(__('Cedula')),
-
+                // Filter::make('document_type')->label(__('Documento')),
             ])
             ->headerActions([
                 CreateAction::make()
@@ -97,9 +89,11 @@ class CustomersList extends Component implements HasForms, HasTable
                     ->icon('heroicon-m-plus')
                     ->color('primary')
                     ->label(__('New customer'))
-            ]);
+            ])
+            ->emptyStateHeading(__('No customers'))
+            ->emptyStateDescription(__('Create a customer to get started.'))
+            ->searchPlaceholder(__('Search'));
     }
-
 
     public function render(): View
     {

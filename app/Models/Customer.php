@@ -9,7 +9,7 @@ class Customer extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'cedula',  'email', 'phone', 'address', 'status'];
+    protected $fillable = ['name','document_type', 'document_number',  'email', 'phone', 'address', 'status'];
 
     protected $casts = [
         'status' => 'boolean',
