@@ -28,6 +28,18 @@
                 <span class="text-sm">{{ __("Categories") }}</span>
             </a>
         </li>
+        <li @class([ 'mb-1' , 'group' , 'active'=> Request::is('warehouses*') ])>
+            <a href="{{ route('warehouses.index') }}" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                <i class="ri-home-2-line mr-3 text-lg"></i>
+                <span class="text-sm">{{ __("Warehouses") }}</span>
+            </a>
+        </li>
+        <li @class([ 'mb-1' , 'group' , 'active'=> Request::is('products*') ])>
+            <a href="{{ route('products.index') }}" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                <i class="ri-home-2-line mr-3 text-lg"></i>
+                <span class="text-sm">{{ __("Products") }}</span>
+            </a>
+        </li>
     </ul>
 </div>
 <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>

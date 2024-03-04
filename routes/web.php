@@ -4,6 +4,8 @@ use App\Livewire\Brands\BrandList;
 use App\Livewire\Categories\CategoryList;
 use App\Livewire\Customers\CustomersList;
 use App\Livewire\Dashboard;
+use App\Livewire\Products\ProductList;
+use App\Livewire\Warehouses\WarehouseList;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,4 +24,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/customers', CustomersList::class)->name('customers.index');
     Route::get('/brands', BrandList::class)->name('brands.index');
     Route::get('/categories', CategoryList::class)->name('categories.index');
+    Route::get('/warehouses', WarehouseList::class)->name('warehouses.index');
+    Route::get('/products', ProductList::class)->name('products.index');
 });

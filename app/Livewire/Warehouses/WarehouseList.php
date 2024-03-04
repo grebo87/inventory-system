@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Livewire\Categories;
+namespace App\Livewire\Warehouses;
 
-use App\Models\Category;
+use App\Models\Warehouse;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Support\Enums\ActionSize;
 use Filament\Support\Enums\Alignment;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Actions\ActionGroup;
@@ -19,36 +18,36 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
-use Illuminate\Contracts\View\View;
+use Illuminate\View\View;
 use Livewire\Component;
 
-class CategoryList extends Component implements HasForms, HasTable
+class WarehouseList extends Component implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
 
 
     public function table(Table $table): Table
     {
-        return $table->query(Category::query())
+        return $table->query(Warehouse::query())
             ->columns([
                 TextColumn::make('code')
-                    ->label(__('Code'))
+                    ->sortable()
                     ->searchable()
-                    ->sortable(),
+                    ->label(__('Code')),
                 TextColumn::make('name')
-                    ->label(__('Name'))
+                    ->sortable()
                     ->searchable()
-                    ->sortable(),
+                    ->label(__('Name')),
                 TextColumn::make('description')
-                    ->label(__('Description'))
+                    ->sortable()
                     ->searchable()
-                    ->sortable(),
+                    ->label(__('Description'))
             ])
             ->filters([
                 Filter::make('code')
                     ->label(__('Code')),
                 Filter::make('name')
-                    ->label(__('Name')),
+                    ->label(__('Name'))
             ])
             ->actions([
                 ActionGroup::make([
@@ -56,32 +55,32 @@ class CategoryList extends Component implements HasForms, HasTable
                         ->form($this->inputsForm())
                         ->modalAlignment(Alignment::Start)
                         ->modalWidth(MaxWidth::ThreeExtraLarge)
-                        ->successNotificationTitle(__('Category saved successfully.')),
+                        ->successNotificationTitle(__('Warehouse saved successfully.')),
                     DeleteAction::make()
-                        ->successNotificationTitle(__('Category delete successfully.'))
-                ])->size(ActionSize::ExtraSmall)
+                        ->successNotificationTitle(__('Warehouse delete successfully.'))
+                ])
             ])
             ->headerActions([
                 CreateAction::make()
-                    ->model(Category::class)
+                ->model(Warehouse::class)
                     ->form($this->inputsForm())
                     ->modalAlignment(Alignment::Start)
                     ->modalWidth(MaxWidth::ThreeExtraLarge)
-                    ->successNotificationTitle(__('Category saved successfully.'))
+                    ->successNotificationTitle(__('Warehouse saved successfully.'))
                     ->icon('heroicon-m-plus')
                     ->color('primary')
-                    ->label(__('New Category'))
+                    ->label(__('New Warehouse'))
             ])
-            ->emptyStateHeading(__('No Categories'))
-            ->emptyStateDescription(__('Create a categories to get started.'))
+            ->emptyStateHeading(__('No Warehouses'))
+            ->emptyStateDescription(__('Create a warehouses to get started.'))
             ->searchPlaceholder(__('Search'));
     }
 
-
     public function render(): View
     {
-        return view('livewire.categories.category-list');
+        return view('livewire.warehouses.warehouse-list');
     }
+
 
     public function inputsForm(): array
     {
@@ -90,15 +89,14 @@ class CategoryList extends Component implements HasForms, HasTable
                 ->schema([
                     TextInput::make('code')
                         ->label(__('Code'))
-                        ->default(function (Category $category) {
-                            $lastCategory = $category->orderBy('id', 'desc')->first();
-                            return empty($lastCategory) ? 'C01' : 'C' . str_pad($lastCategory->id + 1, 2, "0", STR_PAD_LEFT);
+                        ->default(function (Warehouse $warehouse) {
+                            $lastWarehouse = $warehouse->orderBy('id', 'desc')->first();
+                            return empty($lastWarehouse) ? '001' : str_pad($lastWarehouse->id + 1, 3, "0", STR_PAD_LEFT);
                         })
-                        ->required()
                         ->grow(),
                     TextInput::make('name')
                         ->required()
-                        ->unique(table: Category::class, column: 'name', ignoreRecord: true)
+                        ->unique(table: Warehouse::class, column: 'name', ignoreRecord: true)
                         ->label(__('Name')),
                     TextInput::make('description')
                         ->label(__('Description')),
