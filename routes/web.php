@@ -1,7 +1,7 @@
 <?php
 
-use App\Livewire\Counter;
-use App\Livewire\Customers\CreateCustomer;
+use App\Livewire\Brands\BrandList;
+use App\Livewire\Categories\CategoryList;
 use App\Livewire\Customers\CustomersList;
 use App\Livewire\Dashboard;
 use Illuminate\Support\Facades\Route;
@@ -17,10 +17,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', Dashboard::class)->middleware(['auth']);
-
-Route::middleware(['auth'])->group(function(){
-   
-    Route::get('/customers',CustomersList::class)->name('customers.index');
-    Route::get('/customers/create',CreateCustomer::class)->name('customers.create');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', Dashboard::class);
+    Route::get('/customers', CustomersList::class)->name('customers.index');
+    Route::get('/brands', BrandList::class)->name('brands.index');
+    Route::get('/categories', CategoryList::class)->name('categories.index');
 });
