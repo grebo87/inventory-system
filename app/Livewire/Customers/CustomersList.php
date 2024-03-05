@@ -36,10 +36,6 @@ class CustomersList extends Component implements HasForms, HasTable
                     ->searchable()
                     ->sortable()
                     ->formatStateUsing(fn (Customer $record): string => "{$record->document_type}: {$record->document_number}"),
-                // TextColumn::make('document_number')
-                // ->label(__('Document Number'))
-                // ->searchable()
-                // ->sortable(),
                 TextColumn::make('name')
                     ->label(__('Name'))
                     ->searchable()
@@ -76,8 +72,6 @@ class CustomersList extends Component implements HasForms, HasTable
             ])
             ->filters([
                 // Filter::make('name')->label(__('Name')),
-                // Filter::make('status')->toggle(),
-                // Filter::make('document_type')->label(__('Documento')),
             ])
             ->headerActions([
                 CreateAction::make()

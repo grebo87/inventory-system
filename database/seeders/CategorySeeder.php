@@ -14,6 +14,47 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::factory(100)->create();
+        Category::insert([
+            [
+                'name' => 'Tecnología',
+                'description' => 'Tecnología',
+                'code' => 'C01'
+            ],
+            [
+
+                'name' => 'Bebidas',
+                'description' => 'Bebidas',
+                'code' => 'C02'
+            ],
+            [
+
+                'name' => 'Alimentos',
+                'description' => 'Alimentos',
+                'code' => 'C03'
+            ],
+            [
+
+                'name' => 'Automóviles',
+                'description' => 'Automóviles',
+                'code' => 'C04'
+            ],
+            [
+
+                'name' => 'Calzado y ropa',
+                'description' => 'Calzado y ropa',
+                'code' => 'C05'
+            ],
+            [
+
+                'name' => 'Electrodomésticos',
+                'description' => 'Electrodomésticos',
+                'code' => 'C06'
+            ],
+            [
+                'name' => 'Productos de consumo masivo',
+                'description' => 'Productos de consumo masivo',
+                'code' => 'C07'
+            ],
+        ]);
     }
 }

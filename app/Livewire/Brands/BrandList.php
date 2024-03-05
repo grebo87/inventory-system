@@ -39,7 +39,6 @@ class BrandList extends Component implements HasForms, HasTable
                     ->formatStateUsing(fn (Brand $record): string => $record->created_at->toDateString())
                     ->label(__('Creation date'))
                     ->sortable()
-                // ->grow(),
             ])
             ->filters([
                 Filter::make('name')
