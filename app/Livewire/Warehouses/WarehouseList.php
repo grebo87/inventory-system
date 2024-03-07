@@ -41,7 +41,11 @@ class WarehouseList extends Component implements HasForms, HasTable
                 TextColumn::make('description')
                     ->sortable()
                     ->searchable()
-                    ->label(__('Description'))
+                    ->label(__('Description')),
+                TextColumn::make('address')
+                    ->sortable()
+                    ->searchable()
+                    ->label(__('Address'))
             ])
             ->filters([
                 Filter::make('code')
@@ -100,6 +104,8 @@ class WarehouseList extends Component implements HasForms, HasTable
                         ->label(__('Name')),
                     TextInput::make('description')
                         ->label(__('Description')),
+                    TextInput::make('address')
+                        ->label(__('Address')),
                 ])
         ];
     }
