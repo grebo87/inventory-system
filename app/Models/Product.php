@@ -6,6 +6,8 @@ use App\Models\Catalog\Currency;
 use App\Models\Catalog\MeasurementUnit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
@@ -27,11 +29,25 @@ class Product extends Model
     ];
 
 
-    public function currency() : HasOne {
+    public function currency(): HasOne
+    {
         return $this->hasOne(Currency::class, 'id', 'currency_id');
     }
 
-    public function measurementUnit() : HasOne {
+    public function measurementUnit(): HasOne
+    {
         return $this->hasOne(MeasurementUnit::class, 'id', 'measurement_unit_id');
+    }
+
+    public function movements(): HasMany
+    {
+        return $this->hasMany(Movement::class);
+    }
+
+    public function warehouses(): BelongsToMany
+    {
+        return $this->belongsToMany(Warehouse::class, 'product_warehouse')
+            ->withPivot('stock')
+            ->withTimestamps();
     }
 }

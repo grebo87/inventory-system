@@ -51,7 +51,8 @@ class ProductList extends Component implements HasForms, HasTable
                     ->searchable(),
                 TextColumn::make('stock')
                     ->label(__('Stock'))
-                    ->numeric(decimalPlaces: 2)
+                    ->state(fn (Product $product): float => $product->warehouses()->sum('product_warehouse.stock'))
+                    ->numeric(decimalPlaces: 2),
             ])
             ->filters([
                 SelectFilter::make('currency_id')
@@ -92,6 +93,17 @@ class ProductList extends Component implements HasForms, HasTable
                     ->icon('heroicon-m-plus')
                     ->color('primary')
                     ->label(__('New Product'))
+                    ->after(function (CreateAction $action, Product $product) {
+                        $warehouse = Warehouse::find($product->warehouse_id);
+                        
+                        $product->movements()->create([
+                            'warehouse_id' => $warehouse->id,
+                            'type' => 'initial-stock',
+                            'quantity' => $product->initial_stock,
+                        ]);
+
+                        $product->warehouses()->attach($warehouse->id, ['stock' => $product->initial_stock]);
+                    })
             ])
             ->emptyStateHeading(__('No Products'))
             ->emptyStateDescription(__('Create a products to get started.'))
