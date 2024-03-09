@@ -6,6 +6,7 @@ use App\Livewire\Customers\CustomersList;
 use App\Livewire\Dashboard;
 use App\Livewire\Movements\MovementsList;
 use App\Livewire\Products\ProductList;
+use App\Livewire\Transfer\TransfersList;
 use App\Livewire\Warehouses\WarehouseList;
 use Illuminate\Support\Facades\Route;
 
@@ -28,4 +29,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/warehouses', WarehouseList::class)->name('warehouses.index');
     Route::get('/products', ProductList::class)->name('products.index');
     Route::get('/movements', MovementsList::class)->name('movements.index');
+
+    Route::get('/transfers', TransfersList::class)->name('transfers.index');
+    
 });

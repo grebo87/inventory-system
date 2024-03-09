@@ -51,7 +51,17 @@ class ProductList extends Component implements HasForms, HasTable
                     ->searchable(),
                 TextColumn::make('stock')
                     ->label(__('Stock'))
-                    ->state(fn (Product $product): float => $product->warehouses()->sum('product_warehouse.stock'))
+                    ->state(function (Product $product) use ($table): float {
+                        $form = $table->getLivewire()->getTableFiltersForm();
+                        $dataFilters = $form->getLivewire()->tableFilters;
+
+                        if (isset($dataFilters['warehouse_id']['value'])) {
+                            $warehouse_id = $dataFilters['warehouse_id']['value'];
+                            return $product->warehouses()->where('warehouse_id', $warehouse_id)->sum('product_warehouse.stock');
+                        }
+
+                        return $product->warehouses()->sum('product_warehouse.stock');
+                    })
                     ->numeric(decimalPlaces: 2),
             ])
             ->filters([
@@ -65,7 +75,7 @@ class ProductList extends Component implements HasForms, HasTable
                     ->options(Brand::pluck('name', 'id'))
                     ->label(__('Brand')),
                 SelectFilter::make('warehouse_id')
-                    ->options(Warehouse::pluck('name', 'id'))
+                    ->relationship('warehouses', 'name')
                     ->label(__('Warehouse')),
             ])
             ->actions([
@@ -95,7 +105,7 @@ class ProductList extends Component implements HasForms, HasTable
                     ->label(__('New Product'))
                     ->after(function (CreateAction $action, Product $product) {
                         $warehouse = Warehouse::find($product->warehouse_id);
-                        
+
                         $product->movements()->create([
                             'warehouse_id' => $warehouse->id,
                             'type' => 'initial-stock',
